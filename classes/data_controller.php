@@ -108,7 +108,7 @@ class data_controller extends \core_customfield\data_controller {
      *    fields for this instance will be added, otherwise the default values will be added.
      */
     public function instance_form_before_set_data(\stdClass $instance) {
-        $instance->{$this->get_form_element_name()} = implode(',', $this->get_value());
+        $instance->{$this->get_form_element_name()} = explode(',', $this->get_value());
     }
     /**
      * Saves the data coming from form
@@ -148,19 +148,6 @@ class data_controller extends \core_customfield\data_controller {
         }
         return $errors;
     }
-
-    /**
-     * Returns the value as it is stored in the database or default value if data record is not present
-     *
-     * @return array
-     */
-    public function get_value() {
-        if (!$this->get('id')) {
-            return explode(',', $this->get_default_value());
-        }
-        return explode(',', $this->get($this->datafield()));
-    }
-
     /**
      * Checks if the value is empty
      *
@@ -177,7 +164,7 @@ class data_controller extends \core_customfield\data_controller {
      * @return mixed|null value or null if empty
      */
     public function export_value() {
-        $value = $this->get_value();
+        $value = explode(',',$this->get_value());
 
         if ($this->is_empty($value)) {
             return null;
